@@ -1,0 +1,125 @@
+﻿@model TEST_DEV_FRANCISCOMORAPEREZ_20052021.Models.ClientCollection
+
+@{
+    ViewData["Title"] = "Clientes";
+}
+
+@*<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"/>*@
+<div class="jumbotron">
+    <h1 class="text-center">@ViewData["Clientes"]</h1>
+</div>
+<div class="container text-center">
+    <button class="btn btn-primary" onclick="exportTableToExcel('example', 'clientes')">Exportar a Excel</button>
+
+</div>
+
+<table id="example" class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>
+                FechaRegistroEmpresa
+            </th>
+            <th>
+                RazonSocial
+            </th>
+            <th>
+                RFC
+            </th>
+            <th>
+                Sucursal
+            </th>
+            <th>
+                Nombre
+            </th>
+            <th>
+                Paterno
+            </th>
+            <th>
+                Materno
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var data in @Model.Data)
+        {
+            <tr>
+                <td>@data.FechaRegistroEmpresa </td>
+                <td>@data.RazonSocial </td>
+                <td>@data.RFC </td>
+                <td>@data.Sucursal </td>
+                <td>@data.Nombre </td>
+                <td>@data.Paterno</td>
+                <td>@data.Materno </td>
+
+            </tr>
+
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <script type="text/JavaScript">
+
+        $(document).ready(function () {
+
+            $('#example').DataTable({
+                language: {
+                    processing: "Tratamiento en curso...",
+                    search: "Buscar&nbsp;:",
+                    lengthMenu: "Agrupar de _MENU_ items",
+                    info: "Mostrando del item _START_ al _END_ de un total de _TOTAL_ items",
+                    infoEmpty: "No existen datos.",
+                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron datos con tu busqueda",
+                    emptyTable: "No hay datos disponibles en la tabla.",
+                    paginate: {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    aria: {
+                        sortAscending: ": active para ordenar la columna en orden ascendente",
+                        sortDescending: ": active para ordenar la columna en orden descendente"
+                    }
+                },
+
+                lengthMenu: [[20, 40, -1], [20, 40, "All"]],
+
+            });
+        });
+
+        function exportTableToExcel(tableID, filename = '') {
+            var downloadLink;
+            var dataType = 'application/vnd.ms-excel';
+            var tableSelect = document.getElementById(tableID);
+            var tableHTML = tableSelect.outerHTML.replace(/ /g, '%20');
+
+            // Specify file name
+            filename = filename ? filename + '.xls' : 'excel_data.xls';
+
+            // Create download link element
+            downloadLink = document.createElement("a");
+
+            document.body.appendChild(downloadLink);
+
+            if (navigator.msSaveOrOpenBlob) {
+                var blob = new Blob(['ufeff', tableHTML], {
+                    type: dataType
+                });
+                navigator.msSaveOrOpenBlob(blob, filename);
+            } else {
+                // Create a link to the file
+                downloadLink.href = 'data:' + dataType + ', ' + tableHTML;
+
+                // Setting the file name
+                downloadLink.download = filename;
+
+                //triggering the function
+                downloadLink.click();
+            }
+        }
+    </script>
+}

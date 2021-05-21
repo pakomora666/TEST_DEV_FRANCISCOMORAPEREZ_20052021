@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql.local",
+      "connectionId": "TEST_DEV_FRANCISCOMORAPEREZ_20052021Context"
+    }
+  }
+}
